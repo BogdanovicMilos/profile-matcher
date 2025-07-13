@@ -50,13 +50,13 @@ class MockPlayerRepository(PlayerRepository):
 
     async def get_player_profile(self, player_id: UUID):
         for player in self._players:
-            if player["id"] == player_id:
+            if player["player_id"] == player_id:
                 return player
         return None
 
     async def update_active_campaigns(self, profile, campaigns):
         for player in self._players:
-            if player["id"] == player["id"]:
+            if player["player_id"] == profile["player_id"]:
                 player["active_campaigns"] = campaigns
                 return player
         return None
