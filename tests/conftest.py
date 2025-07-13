@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from httpx import ASGITransport, AsyncClient
 from unittest.mock import AsyncMock, Mock
 
+from application.api.dependencies.db import async_get_db
 from application.api.main import app
 from infrastructure.database.models.player import Player
 from infrastructure.database.repositories.player_repository import (
@@ -42,3 +43,15 @@ def player():
         inventory=[],
         clan=None,
     )
+
+
+@pytest.fixture(autouse=True)
+def override_db():
+    """
+    Override the async_get_db dependency so all routes receive a fake DB session.
+    """
+
+    async def fake_get_db():
+        yield None
+
+    app.dependency_overrides[async_get_db] = fake_get_db
