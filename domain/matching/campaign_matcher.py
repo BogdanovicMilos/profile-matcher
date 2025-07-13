@@ -12,7 +12,6 @@ class CampaignMatcher:
         :return: Campaign names that match the player's profile
         """
 
-        # convert an inventory list to a dict for fast lookups
         inventory = {
             item.item_key: item.item_count for item in profile.inventory
         }
