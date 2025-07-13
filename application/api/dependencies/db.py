@@ -9,6 +9,11 @@ Base = declarative_base()
 
 
 async def async_get_db():
+    """
+    Dependency for retrieving an async database session.
+    Ensures proper cleanup of the session after use.
+    """
+
     _session_maker = async_session_maker()
     async with _session_maker() as db:
         try:

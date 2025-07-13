@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 from sqlalchemy import create_engine
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from sqlalchemy.orm import sessionmaker
 
 from application.config.settings import settings
@@ -25,11 +29,12 @@ def async_session_maker():
     global _session_maker
     if _session_maker is None:
         async_engine = create_async_engine(ASYNC_SQLALCHEMY_DATABASE_URL)
-        _session_maker = sessionmaker(
+        _session_maker = async_sessionmaker(
             bind=async_engine,
             expire_on_commit=False,
             class_=AsyncSession,
         )
+
     return _session_maker
 
 

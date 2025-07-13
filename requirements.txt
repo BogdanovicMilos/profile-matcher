@@ -6,8 +6,8 @@ apscheduler==3.10.4
 asyncpg==0.30.0
 Authlib
 fastapi-utils
-fastapi[all]~=0.112.2
-greenlet>=2.0.0
+fastapi[all]~=0.116.0
+greenlet==3.2.3
 httpx
 jsonschema
 pandas
@@ -24,5 +24,5 @@ PyYAML
 pyyaml~=6.0.2
 redis
 sqlalchemy~=2.0.41
-starlette~=0.38.2
+starlette==0.47.0
 uvicorn
