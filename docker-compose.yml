@@ -1,0 +1,38 @@
+name: matcher
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+    container_name: api
+    restart: always
+    env_file:
+      - ".env.docker"
+    ports:
+      - "8000:8000"
+    networks:
+      - matcher
+    depends_on:
+      - db
+    command: >
+      bash -c "alembic upgrade head && uvicorn application.api.main:app --host 0.0.0.0 --port 8000"
+
+  db:
+    image: postgres:16
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    ports:
+      - "5432:5432"
+    networks:
+      - matcher
+
+networks:
+  matcher:
+    driver: bridge
+
+volumes:
+  db_data: {}
