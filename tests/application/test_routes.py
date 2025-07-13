@@ -21,7 +21,8 @@ async def test_get_client_config_success(
         "application.api.routers.client.CampaignService", MockCampaignService
     )
 
-    response = await client.get(f"/api/get_client_config/{UUID(int=1)}")
+    player_id = UUID("00000000-0000-0000-0000-000000000001")
+    response = await client.get(f"/api/get_client_config/{player_id}")
     assert response.status_code == 200
     data = response.json()
     assert data["player_id"] == "00000000-0000-0000-0000-000000000001"
@@ -31,12 +32,13 @@ async def test_get_client_config_success(
 async def test_get_client_config_player_not_found(
     mocker: MockerFixture, client: AsyncClient
 ):
-    """Test when player is not found"""
+    """Test when a player is not found"""
     mocker.patch(
         "application.api.routers.client.PlayerRepository", MockPlayerRepository
     )
 
-    response = await client.get(f"/api/get_client_config/{UUID(int=999)}")
+    player_id = UUID("00000000-0000-0000-0000-000000000009")
+    response = await client.get(f"/api/get_client_config/{player_id}")
     assert response.status_code == 404
     assert response.json()["detail"] == "Player not found"
 
@@ -54,7 +56,8 @@ async def test_get_client_config_with_running_campaign(
         "application.api.routers.client.CampaignService", MockCampaignService
     )
 
-    response = await client.get(f"/api/get_client_config/{UUID(int=1)}")
+    player_id = UUID("00000000-0000-0000-0000-000000000001")
+    response = await client.get(f"/api/get_client_config/{player_id}")
     assert response.status_code == 200
     data = response.json()
     assert "Summer Event" in data["active_campaigns"]
@@ -79,7 +82,8 @@ async def test_get_client_config_no_running_campaigns(
         "application.api.routers.client.CampaignService", EmptyCampaignService
     )
 
-    response = await client.get(f"/api/get_client_config/{UUID(int=1)}")
+    player_id = UUID("00000000-0000-0000-0000-000000000001")
+    response = await client.get(f"/api/get_client_config/{player_id}")
     assert response.status_code == 404
     data = response.json()
     assert data["detail"] == "No active campaigns found"
